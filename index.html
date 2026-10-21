@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Word Imposter</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700;800&family=DM+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="wrap">
+
+    <!-- Loading -->
+    <section id="loading" class="panel">
+      <p class="muted" style="margin:0">Connecting…</p>
+    </section>
+
+    <!-- Host signed in on this browser -->
+    <section id="hostBlock" class="panel hidden">
+      <h2>You’re signed in as host</h2>
+      <p class="muted">Players and the host can’t share one browser session. Open this page in another browser, or sign out of the host account to play here.</p>
+      <button id="signOutHost" class="block">Sign out and play</button>
+    </section>
+
+    <!-- Join form -->
+    <section id="joinView" class="hidden">
+      <h1>Word Imposter</h1>
+      <p class="muted">Enter your name to join the game. The host will send your secret word.</p>
+      <div class="panel">
+        <label for="name">Your name</label>
+        <input id="name" type="text" maxlength="20" autocomplete="off" placeholder="e.g. Priya">
+        <p id="joinError" class="error" role="alert"></p>
+        <button id="joinBtn" class="block">Join game</button>
+      </div>
+    </section>
+
+    <!-- Joined -->
+    <section id="gameView" class="hidden">
+      <div class="row between" style="margin-bottom:16px">
+        <h2 style="margin:0">Hi, <span id="playerName"></span></h2>
+        <span id="roundTag" class="tag hidden"></span>
+      </div>
+
+      <div id="waiting" class="panel">
+        <h3>Waiting for the host…</h3>
+        <p class="muted" style="margin:0">Your word will appear here the moment the round starts. Keep this page open.</p>
+      </div>
+
+      <div id="wordWrap" class="hidden">
+        <div id="wordCard" class="word-card" role="button" tabindex="0" aria-label="Your word. Tap to hide or show.">
+          <div id="word" class="word"></div>
+          <div class="hint">Tap the card to hide or show your word</div>
+        </div>
+        <p class="muted" style="margin-top:14px">Describe your word without saying it. Don’t show your screen to anyone.</p>
+      </div>
+
+      <div style="margin-top:28px">
+        <button id="leaveBtn" class="ghost small">Leave game</button>
+      </div>
+    </section>
+
+  </main>
+  <script type="module" src="app.js"></script>
+</body>
+</html>

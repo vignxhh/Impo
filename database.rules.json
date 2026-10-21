@@ -1,0 +1,37 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+
+    "players": {
+      ".read": "auth != null && auth.token.email === 'host@gmail.com'",
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        ".write": "auth != null && (auth.uid === $uid || auth.token.email === 'host@gmail.com')",
+        ".validate": "newData.hasChildren(['name', 'joinedAt'])",
+        "name": { ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 20" },
+        "joinedAt": { ".validate": "newData.isNumber()" },
+        "$other": { ".validate": false }
+      }
+    },
+
+    "words": {
+      ".read": "auth != null && auth.token.email === 'host@gmail.com'",
+      ".write": "auth != null && auth.token.email === 'host@gmail.com'",
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        ".write": "auth != null && (auth.token.email === 'host@gmail.com' || (auth.uid === $uid && !newData.exists()))",
+        ".validate": "newData.hasChildren(['word', 'odd', 'round'])",
+        "word": { ".validate": "newData.isString() && newData.val().length <= 30" },
+        "odd": { ".validate": "newData.isBoolean()" },
+        "round": { ".validate": "newData.isNumber()" },
+        "$other": { ".validate": false }
+      }
+    },
+
+    "game": {
+      ".read": "auth != null && auth.token.email === 'host@gmail.com'",
+      ".write": "auth != null && auth.token.email === 'host@gmail.com'"
+    }
+  }
+}

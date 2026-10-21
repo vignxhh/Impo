@@ -1,0 +1,177 @@
+:root {
+  --ink: #1b1948;
+  --night: #2a2870;
+  --night-2: #38358f;
+  --card: #f4f2ff;
+  --gold: #ffc233;
+  --gold-ink: #4a3500;
+  --muted: #a9a6dd;
+  --danger: #ff7a7a;
+  --ok: #7be0a8;
+  --radius: 18px;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+
+html, body { margin: 0; min-height: 100%; }
+
+body {
+  background: var(--night);
+  color: var(--card);
+  font-family: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 17px;
+  line-height: 1.5;
+  padding: env(safe-area-inset-top, 0) 0 env(safe-area-inset-bottom, 0);
+}
+
+.wrap {
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 28px 20px 48px;
+}
+
+.wrap.wide { max-width: 860px; }
+
+h1, h2, h3 {
+  font-family: "Bricolage Grotesque", "DM Sans", system-ui, sans-serif;
+  line-height: 1.1;
+  margin: 0 0 12px;
+  letter-spacing: -0.02em;
+}
+h1 { font-size: 2.4rem; font-weight: 800; }
+h2 { font-size: 1.5rem; font-weight: 700; }
+h3 { font-size: 1.1rem; font-weight: 700; }
+
+p { margin: 0 0 14px; }
+.muted { color: var(--muted); }
+.hidden { display: none !important; }
+
+.panel {
+  background: var(--night-2);
+  border-radius: var(--radius);
+  padding: 22px;
+  margin-bottom: 16px;
+}
+
+label { display: block; font-weight: 600; margin-bottom: 6px; }
+
+input[type="text"], input[type="email"], input[type="password"] {
+  width: 100%;
+  font: inherit;
+  color: var(--ink);
+  background: var(--card);
+  border: 2px solid transparent;
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 14px;
+}
+input:focus-visible, button:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 2px;
+}
+
+button {
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  border: 0;
+  border-radius: 12px;
+  padding: 14px 20px;
+  background: var(--gold);
+  color: var(--gold-ink);
+}
+button:hover { filter: brightness(1.06); }
+button:disabled { opacity: 0.5; cursor: not-allowed; }
+button.block { width: 100%; }
+button.ghost {
+  background: transparent;
+  color: var(--card);
+  border: 2px solid var(--muted);
+}
+button.small { padding: 8px 12px; font-size: 0.9rem; border-radius: 10px; }
+button.danger { background: var(--danger); color: #4a0000; }
+
+.error { color: var(--danger); min-height: 1.4em; margin: 0 0 8px; font-weight: 600; }
+
+.row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+.row.between { justify-content: space-between; }
+
+/* Player word card */
+.word-card {
+  position: relative;
+  background: var(--card);
+  color: var(--ink);
+  border-radius: 24px;
+  min-height: 260px;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: 28px 20px;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  overflow: hidden;
+}
+.word-card .word {
+  font-family: "Bricolage Grotesque", "DM Sans", sans-serif;
+  font-weight: 800;
+  font-size: clamp(2.6rem, 14vw, 4.6rem);
+  letter-spacing: -0.03em;
+  word-break: break-word;
+  transition: filter 0.2s ease;
+}
+.word-card .hint {
+  position: absolute;
+  bottom: 14px;
+  left: 0;
+  right: 0;
+  font-size: 0.85rem;
+  color: #6c68b3;
+}
+.word-card.covered .word { filter: blur(18px); }
+
+.pulse { animation: pop 0.45s ease-out; }
+@keyframes pop {
+  0% { transform: scale(0.94); }
+  60% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pulse { animation: none; }
+  .word-card .word { transition: none; }
+}
+
+/* Host */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 560px) { .grid-2 { grid-template-columns: 1fr; } }
+
+.players { list-style: none; margin: 0; padding: 0; }
+.players li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+.players li:last-child { border-bottom: 0; }
+.tag {
+  display: inline-block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 2px 10px;
+  border-radius: 999px;
+  margin-left: 8px;
+  background: rgba(255, 255, 255, 0.14);
+}
+.tag.odd { background: var(--gold); color: var(--gold-ink); }
+.count {
+  font-family: "Bricolage Grotesque", sans-serif;
+  font-weight: 800;
+  font-size: 1.1rem;
+  background: var(--gold);
+  color: var(--gold-ink);
+  border-radius: 999px;
+  padding: 2px 12px;
+}
