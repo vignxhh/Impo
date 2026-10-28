@@ -1,0 +1,354 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Browser & System Details</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 30px 16px;
+      font-family: Arial, sans-serif;
+      background: #101827;
+      color: #e5e7eb;
+    }
+
+    .container {
+      max-width: 850px;
+      margin: auto;
+    }
+
+    h1 {
+      color: #60a5fa;
+      text-align: center;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #9ca3af;
+      margin-bottom: 28px;
+    }
+
+    .section {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 18px;
+    }
+
+    h2 {
+      font-size: 18px;
+      margin-top: 0;
+      color: #93c5fd;
+    }
+
+    .item {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 11px 0;
+      border-bottom: 1px solid #334155;
+    }
+
+    .item:last-child {
+      border-bottom: none;
+    }
+
+    .label {
+      color: #9ca3af;
+      flex-shrink: 0;
+    }
+
+    .value {
+      text-align: right;
+      overflow-wrap: anywhere;
+    }
+
+    button {
+      background: #2563eb;
+      color: white;
+      border: 0;
+      border-radius: 8px;
+      padding: 11px 16px;
+      cursor: pointer;
+      margin: 4px;
+    }
+
+    button:hover {
+      background: #1d4ed8;
+    }
+
+    .actions {
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .note {
+      color: #9ca3af;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 500px) {
+      .item {
+        flex-direction: column;
+        gap: 5px;
+      }
+
+      .value {
+        text-align: left;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="container">
+    <h1>Browser & System Details</h1>
+    <p class="subtitle">
+      Client-side device and browser information
+    </p>
+
+    <div id="results"></div>
+
+    <div class="actions">
+      <button onclick="refreshDetails()">Refresh Details</button>
+      <button onclick="downloadDetails()">Download JSON</button>
+      <button onclick="copyDetails()">Copy Details</button>
+    </div>
+
+    <p class="note">
+      Privacy: This page processes information locally in your browser.
+      Some values may be unavailable or approximate depending on browser
+      permissions and privacy settings. It cannot access private files,
+      passwords, or your exact physical location.
+    </p>
+  </main>
+
+  <script>
+    let details = {};
+
+    function detectBrowser(ua) {
+      // Order matters: some browsers contain Chrome in their UA.
+      if (/Edg\//i.test(ua)) return "Microsoft Edge";
+      if (/OPR\//i.test(ua)) return "Opera";
+      if (/SamsungBrowser/i.test(ua)) return "Samsung Internet";
+      if (/Firefox\//i.test(ua)) return "Mozilla Firefox";
+      if (/CriOS/i.test(ua)) return "Google Chrome (iOS)";
+      if (/FxiOS/i.test(ua)) return "Firefox (iOS)";
+      if (/Chrome\//i.test(ua)) return "Google Chrome";
+      if (/Safari\//i.test(ua) && /AppleWebKit/i.test(ua)) {
+        return "Apple Safari";
+      }
+      return "Unknown browser";
+    }
+
+    function detectOS(ua) {
+      if (/Windows NT 10\.0/i.test(ua)) return "Windows 10/11";
+      if (/Windows NT 6\.3/i.test(ua)) return "Windows 8.1";
+      if (/Windows/i.test(ua)) return "Windows";
+      if (/Android/i.test(ua)) return "Android";
+      if (/iPhone|iPad|iPod/i.test(ua)) return "iOS/iPadOS";
+      if (/Mac OS X|Macintosh/i.test(ua)) return "macOS";
+      if (/CrOS/i.test(ua)) return "ChromeOS";
+      if (/Linux/i.test(ua)) return "Linux";
+      return "Unknown OS";
+    }
+
+    function getOSArchitecture() {
+      const ua = navigator.userAgent;
+
+      if (navigator.userAgentData?.architecture) {
+        return navigator.userAgentData.architecture;
+      }
+
+      if (/arm|aarch64/i.test(ua)) return "Possibly ARM";
+      if (/x86_64|Win64|x64|WOW64/i.test(ua)) {
+        return "Possibly x86-64";
+      }
+
+      return "Not exposed";
+    }
+
+    function getConnection() {
+      const c = navigator.connection ||
+                navigator.mozConnection ||
+                navigator.webkitConnection;
+
+      if (!c) return "Not supported";
+
+      return [
+        c.effectiveType || "Unknown type",
+        c.downlink != null ? c.downlink + " Mbps estimated" : null,
+        c.rtt != null ? c.rtt + " ms estimated latency" : null,
+        c.saveData ? "Data Saver enabled" : null
+      ].filter(Boolean).join(" | ");
+    }
+
+    function collectDetails() {
+      const ua = navigator.userAgent;
+      const screen = window.screen;
+
+      return {
+        "Browser": {
+          "Name": detectBrowser(ua),
+          "User Agent": ua,
+          "Browser Language": navigator.language || "Unavailable",
+          "Preferred Languages": navigator.languages?.join(", ") || "Unavailable",
+          "Cookies Enabled": navigator.cookieEnabled,
+          "Do Not Track": navigator.doNotTrack || "Not specified",
+          "PDF Viewer Enabled": navigator.pdfViewerEnabled ?? "Unknown",
+          "Online Status": navigator.onLine ? "Online" : "Offline"
+        },
+
+        "Operating System": {
+          "Detected OS": detectOS(ua),
+          "Platform": navigator.userAgentData?.platform ||
+                      navigator.platform || "Unavailable",
+          "Architecture": getOSArchitecture(),
+          "Touch Points": navigator.maxTouchPoints ?? "Unavailable"
+        },
+
+        "Device": {
+          "Device Type": /Mobi|Android/i.test(ua) ? "Likely mobile" :
+                         /iPad|Tablet/i.test(ua) ? "Likely tablet" :
+                         "Likely desktop or other",
+          "CPU Logical Cores": navigator.hardwareConcurrency ??
+                               "Not exposed",
+          "Device Memory (GB)": navigator.deviceMemory ??
+                                "Not exposed",
+          "Vendor": navigator.vendor || "Unavailable"
+        },
+
+        "Screen": {
+          "Screen Resolution": `${screen.width} x ${screen.height}`,
+          "Available Screen Size":
+            `${screen.availWidth} x ${screen.availHeight}`,
+          "Browser Window Size":
+            `${window.innerWidth} x ${window.innerHeight}`,
+          "Color Depth": screen.colorDepth + " bits",
+          "Pixel Depth": screen.pixelDepth + " bits",
+          "Device Pixel Ratio": window.devicePixelRatio
+        },
+
+        "Location & Time": {
+          "Timezone": Intl.DateTimeFormat().resolvedOptions().timeZone,
+          "Timezone Offset": `UTC${-new Date().getTimezoneOffset() / 60 >= 0 ? "+" : ""}${(-new Date().getTimezoneOffset() / 60)}`,
+          "Local Date & Time": new Date().toString(),
+          "Locale": Intl.DateTimeFormat().resolvedOptions().locale
+        },
+
+        "Network": {
+          "Connection Details": getConnection(),
+          "Network API Supported": !!(
+            navigator.connection ||
+            navigator.mozConnection ||
+            navigator.webkitConnection
+          )
+        },
+
+        "Browser Features": {
+          "JavaScript": "Enabled",
+          "Local Storage": storageAvailable("localStorage"),
+          "Session Storage": storageAvailable("sessionStorage"),
+          "Web Workers": typeof Worker !== "undefined",
+          "Service Workers": "serviceWorker" in navigator,
+          "WebAssembly": typeof WebAssembly !== "undefined",
+          "Geolocation API": "geolocation" in navigator,
+          "Bluetooth API": "bluetooth" in navigator,
+          "USB API": "usb" in navigator,
+          "WebRTC": !!(
+            window.RTCPeerConnection ||
+            window.webkitRTCPeerConnection
+          )
+        }
+      };
+    }
+
+    function storageAvailable(type) {
+      try {
+        const storage = window[type];
+        const key = "__storage_test__";
+        storage.setItem(key, "1");
+        storage.removeItem(key);
+        return true;
+      } catch {
+        return false;
+      }
+    }
+
+    function renderDetails() {
+      const root = document.getElementById("results");
+      root.replaceChildren();
+
+      for (const [section, values] of Object.entries(details)) {
+        const card = document.createElement("section");
+        card.className = "section";
+
+        const heading = document.createElement("h2");
+        heading.textContent = section;
+        card.appendChild(heading);
+
+        for (const [label, value] of Object.entries(values)) {
+          const row = document.createElement("div");
+          row.className = "item";
+
+          const labelElement = document.createElement("span");
+          labelElement.className = "label";
+          labelElement.textContent = label;
+
+          const valueElement = document.createElement("span");
+          valueElement.className = "value";
+          valueElement.textContent = String(value);
+
+          row.append(labelElement, valueElement);
+          card.appendChild(row);
+        }
+
+        root.appendChild(card);
+      }
+    }
+
+    function refreshDetails() {
+      details = collectDetails();
+      renderDetails();
+    }
+
+    function downloadDetails() {
+      const blob = new Blob(
+        [JSON.stringify(details, null, 2)],
+        { type: "application/json" }
+      );
+
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+
+      link.href = url;
+      link.download = "browser-details.json";
+      link.click();
+
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+
+    async function copyDetails() {
+      const text = JSON.stringify(details, null, 2);
+
+      try {
+        await navigator.clipboard.writeText(text);
+        alert("Browser details copied!");
+      } catch {
+        alert("Clipboard access unavailable. Use Download JSON instead.");
+      }
+    }
+
+    refreshDetails();
+  </script>
+</body>
+</html>
