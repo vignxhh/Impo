@@ -17,7 +17,10 @@
     </section>
 
     <!-- Login -->
-    <section id="loginView" class="hidden" style="max-width:420px">
+    <section id="loginView" class="hidden" style="max-width:440px; margin:0 auto">
+      <header class="topbar">
+        <div class="brand"><span class="logo">WI</span> Word Imposter</div>
+      </header>
       <h1>Host login</h1>
       <div class="panel">
         <label for="email">Email</label>
@@ -31,39 +34,72 @@
 
     <!-- Host panel -->
     <section id="hostView" class="hidden">
-      <div class="row between" style="margin-bottom:18px">
-        <h1 style="margin:0">Host</h1>
+      <header class="topbar">
+        <div class="brand"><span class="logo">WI</span> Word Imposter · Host</div>
         <div class="row">
           <span id="roundInfo" class="tag">No round yet</span>
           <button id="logoutBtn" class="ghost small">Sign out</button>
         </div>
-      </div>
+      </header>
 
-      <div class="grid-2">
+      <div class="host-grid">
+
+        <!-- Round setup -->
         <div class="panel">
-          <h2>Words</h2>
-          <label for="wordMain">Word for everyone</label>
-          <input id="wordMain" type="text" maxlength="30" autocomplete="off" placeholder="e.g. bike">
-          <label for="wordOdd">Word for one random player</label>
-          <input id="wordOdd" type="text" maxlength="30" autocomplete="off" placeholder="e.g. car">
-          <p id="hostError" class="error" role="alert"></p>
-          <div class="row">
-            <button id="startBtn">Start round</button>
-            <button id="resetBtn" class="ghost">End round</button>
+          <h2>Set up a round</h2>
+
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-body">
+              <h3>Choose two words</h3>
+              <div class="grid-2">
+                <div>
+                  <label for="wordMain">Everyone gets</label>
+                  <input id="wordMain" type="text" maxlength="30" autocomplete="off" placeholder="bike">
+                </div>
+                <div>
+                  <label for="wordOdd">One player gets</label>
+                  <input id="wordOdd" type="text" maxlength="30" autocomplete="off" placeholder="car">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-body">
+              <h3>Shuffle to pick the odd player</h3>
+              <button id="shuffleBtn" class="soft">Shuffle players</button>
+              <div id="pickBox" class="pick-box muted">Not shuffled yet</div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-body">
+              <h3>Send the words</h3>
+              <p id="hostMsg" class="error" role="alert"></p>
+              <div class="row">
+                <button id="startBtn" disabled>Start round</button>
+                <button id="resetBtn" class="ghost">End round</button>
+              </div>
+            </div>
           </div>
         </div>
 
+        <!-- Players -->
         <div class="panel">
-          <div class="row between" style="margin-bottom:8px">
+          <div class="row between" style="margin-bottom:14px">
             <h2 style="margin:0">Players</h2>
             <span id="playerCount" class="count">0</span>
           </div>
           <ul id="playerList" class="players"></ul>
-          <p id="emptyMsg" class="muted" style="margin:0">Nobody has joined yet. Share the player link.</p>
-          <div style="margin-top:14px">
+          <p id="emptyMsg" class="empty">Nobody has joined yet.<br>Share the player link to get started.</p>
+          <div style="margin-top:16px">
             <button id="clearBtn" class="ghost small">Remove all players</button>
           </div>
         </div>
+
       </div>
     </section>
 

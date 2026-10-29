@@ -12,6 +12,11 @@
 <body>
   <main class="wrap">
 
+    <header class="topbar">
+      <div class="brand"><span class="logo">WI</span> Word Imposter</div>
+      <span id="roundTag" class="tag hidden"></span>
+    </header>
+
     <!-- Loading -->
     <section id="loading" class="panel">
       <p class="muted" style="margin:0">Connecting…</p>
@@ -26,8 +31,10 @@
 
     <!-- Join form -->
     <section id="joinView" class="hidden">
-      <h1>Word Imposter</h1>
-      <p class="muted">Enter your name to join the game. The host will send your secret word.</p>
+      <div class="hero">
+        <h1>Find the odd one out</h1>
+        <p class="muted">Join with your name. The host will send you a secret word. Describe it without saying it, and spot who got a different one.</p>
+      </div>
       <div class="panel">
         <label for="name">Your name</label>
         <input id="name" type="text" maxlength="20" autocomplete="off" placeholder="e.g. Priya">
@@ -38,25 +45,24 @@
 
     <!-- Joined -->
     <section id="gameView" class="hidden">
-      <div class="row between" style="margin-bottom:16px">
-        <h2 style="margin:0">Hi, <span id="playerName"></span></h2>
-        <span id="roundTag" class="tag hidden"></span>
-      </div>
+      <h2>Hi, <span id="playerName"></span></h2>
 
-      <div id="waiting" class="panel">
-        <h3>Waiting for the host…</h3>
-        <p class="muted" style="margin:0">Your word will appear here the moment the round starts. Keep this page open.</p>
+      <div id="waiting" class="panel waiting-card">
+        <div class="dots" aria-hidden="true"><span></span><span></span><span></span></div>
+        <h3>Waiting for the host</h3>
+        <p class="muted" style="margin:0">Your word appears here the moment the round starts. Keep this page open.</p>
       </div>
 
       <div id="wordWrap" class="hidden">
         <div id="wordCard" class="word-card" role="button" tabindex="0" aria-label="Your word. Tap to hide or show.">
+          <div class="label">Your word</div>
           <div id="word" class="word"></div>
-          <div class="hint">Tap the card to hide or show your word</div>
+          <div class="hint">Tap the card to hide or show</div>
         </div>
-        <p class="muted" style="margin-top:14px">Describe your word without saying it. Don’t show your screen to anyone.</p>
+        <p class="muted" style="margin-top:22px">Describe it without saying it. Don’t show your screen to anyone.</p>
       </div>
 
-      <div style="margin-top:28px">
+      <div style="margin-top:26px">
         <button id="leaveBtn" class="ghost small">Leave game</button>
       </div>
     </section>
